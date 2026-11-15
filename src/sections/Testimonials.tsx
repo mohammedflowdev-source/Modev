@@ -1,8 +1,7 @@
 "use client"
 import { FC, useRef, useState } from "react";
 import image1 from "@/assets/images/testimonial-1.jpg";
-import image2 from "@/assets/images/testimonial-2.jpg";
-import image3 from "@/assets/images/testimonial-3.jpg";
+
 
 import { useScroll, motion, useTransform, AnimatePresence } from "motion/react";
 import Testimoial from "@/components/Testimonial";
