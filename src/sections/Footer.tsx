@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
 import { useInView } from "motion/react";
 import { FC, useEffect, MouseEvent } from "react";
+import { useSmoothScroll } from "@/components/SmoothScroll";
 
 
 const navItems = [
@@ -31,14 +32,11 @@ const navItems = [
 const Footer: FC = () => {
   const { scope, entranceAnimation } = useTextRevealAnimation()
   const inView = useInView(scope);
+  const { scrollToHash } = useSmoothScroll()
   const handleClickNavItem = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const url = new URL(e.currentTarget.href);
-    const hash = url.hash
-    const target = document.querySelector(hash)
-
-    if (!target) return;
-    target.scrollIntoView({ behavior: `smooth` })
+    scrollToHash(url.hash)
 
 
 

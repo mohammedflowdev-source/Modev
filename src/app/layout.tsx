@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo } from 'next/font/google'
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const archivo = Archivo({
   display: "swap",
@@ -33,7 +35,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`antialiased bg-stone-200 text-stone-900 dark:bg-stone-950 dark:text-stone-100 transition-colors duration-500 ${archivo.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

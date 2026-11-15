@@ -1,6 +1,7 @@
 "use client"
 import Button from "@/components/Button";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useSmoothScroll } from "@/components/SmoothScroll";
 import { FC, MouseEvent, useEffect, useState } from "react";
 import { motion, useAnimate } from "motion/react"
 
@@ -34,6 +35,14 @@ const Header: FC = () => {
   const [bottomLineScope, bottomLineAnimate] = useAnimate()
 
   const [navScope, navAnimate] = useAnimate()
+  const { lenis, scrollToHash } = useSmoothScroll()
+
+  // Pause smooth scrolling while the full-screen menu is open.
+  useEffect(() => {
+    if (!lenis) return;
+    if (isOpen) lenis.stop();
+    else lenis.start();
+  }, [isOpen, lenis])
 
   useEffect(() => {
     if (isOpen) {
@@ -111,11 +120,7 @@ const Header: FC = () => {
     e.preventDefault();
     setIsOpen(false)
     const url = new URL(e.currentTarget.href);
-    const hash = url.hash
-    const target = document.querySelector(hash)
-
-    if (!target) return;
-    target.scrollIntoView({ behavior: `smooth` })
+    scrollToHash(url.hash)
 
 
 
@@ -136,7 +141,7 @@ const Header: FC = () => {
         ))}
       </nav>
     </div>
-    <div className="fixed top-0 left-0 w-full backdrop-blur-md z-10 pointer-events-none" style={{ height: "calc(5rem + env(safe-area-inset-top))" }} aria-hidden="true" />
+    <div className="fixed top-0 left-0 w-full backdrop-blur-md z-10 pointer-events-none" data-navbar style={{ height: "calc(5rem + env(safe-area-inset-top))" }} aria-hidden="true" />
     <div className="fixed top-0 left-0 w-full mix-blend-difference z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <div className="container !max-w-full">
         <div className="flex justify-between h-20 items-center">
