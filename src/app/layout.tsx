@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`antialiased bg-[var(--page-bg)] text-stone-900 dark:text-stone-100 transition-colors duration-500 ${archivo.variable} ${signatureFont.variable} font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <SmoothScroll><PageTransition>{children}</PageTransition></SmoothScroll>
           <Cursor />
           <div className="grain" aria-hidden="true" />
