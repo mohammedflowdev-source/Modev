@@ -1,9 +1,9 @@
-import { renderMoMark } from "@/components/MoMark";
+import { renderSignatureIcon } from "@/components/SignatureIcon";
 
-// Favicon: "MO" mark, light text on the site's dark stone background.
+// Favicon: script "M" with an orange dot on a dark rounded square.
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
 
 export default function Icon() {
-  return renderMoMark({ size: 64, fontSize: 30, radius: 12 });
+  return renderSignatureIcon({ size: 64, radius: 14 });
 }

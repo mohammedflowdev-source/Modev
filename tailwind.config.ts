@@ -15,7 +15,8 @@ const config: Config = {
         },
         extend: {
             fontFamily: {
-                sans: `var(--font-archivo)`
+                sans: `var(--font-archivo)`,
+                signature: `var(--font-signature)`
             },
             container: {
                 center: true,

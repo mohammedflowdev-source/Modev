@@ -8,9 +8,12 @@ import Testimonials from "@/sections/Testimonials";
 import Marquee from "@/components/Marquee";
 import Services from "@/sections/Services";
 import Process from "@/sections/Process";
+import Preloader from "@/components/Preloader";
 export default function Home() {
   return (
     <>
+      {/* First in the HTML so its inline script runs before anything else paints */}
+      <Preloader />
       <Header />
       {/* Page content sits above the footer and slides up to uncover it (curtain reveal). */}
       <main className="relative z-[1] bg-[var(--page-bg)] transition-colors duration-500">

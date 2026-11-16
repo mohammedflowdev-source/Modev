@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import ThemeToggle from "@/components/ThemeToggle";
 import Link from "next/link";
 import ContactForm from "@/components/ContactForm";
+import SignatureLogo from "@/components/SignatureLogo";
 import { motion } from "motion/react";
 import WhatsAppIcon, { whatsappHref } from "@/components/WhatsAppIcon";
 
@@ -14,10 +15,8 @@ export default function ContactPage() {
       <header className="fixed top-0 left-0 w-full backdrop-blur-md z-40">
         <div className="container !max-w-full">
           <div className="flex justify-between h-20 items-center">
-            <Link href="/">
-              <span className="text-xl font-bold uppercase">
-                Mo Dev.
-              </span>
+            <Link href="/" aria-label="Mo Dev — home">
+              <SignatureLogo />
             </Link>
 
             <div className="flex items-center gap-4">

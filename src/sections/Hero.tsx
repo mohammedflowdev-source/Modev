@@ -9,6 +9,7 @@ import Button from "@/components/Button"
 import { motion, useScroll, useTransform } from "motion/react";
 
 import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
+import { usePreloaderDone } from "@/lib/preloader";
 
 
 const Hero: FC = () => {
@@ -21,10 +22,12 @@ const Hero: FC = () => {
 
   const portraitWidth = useTransform(scrollYProgress, [0, 1], ['100%', '240%'])
   const { scope, entranceAnimation } = useTextRevealAnimation()
+  // Wait for the preloader curtain (if any) before the headline's line reveal and the buttons.
+  const ready = usePreloaderDone()
 
   useEffect(() => {
-    entranceAnimation()
-  }, [entranceAnimation])
+    if (ready) entranceAnimation()
+  }, [ready, entranceAnimation])
 
   return <section>
     <div className="grid md:grid-cols-12 md:h-screen items-stretch sticky top-0">
@@ -32,9 +35,9 @@ const Hero: FC = () => {
         <div className="container !max-w-full">
           {/* md+: max-width in em (8.49em longest line < 9.2em < 10.26em next break) keeps exactly 4 lines:
               "Crafting digital / experiences through / code and creative / design" at every width */}
-          <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} ref={scope} className="text-[3.0625rem] md:text-6xl lg:text-[length:clamp(3rem,calc(5.3vw-12px),7rem)] tracking-[-0.03em] leading-none max-w-[18.3ch] md:max-w-[9.2em] mt-40 md:mt-0">Crafting digital experiences through code and creative design</motion.h1>
+          <motion.h1 initial={{ opacity: 0 }} animate={ready ? { opacity: 1 } : undefined} ref={scope} className="text-[3.0625rem] md:text-6xl lg:text-[length:clamp(3rem,calc(5.3vw-12px),7rem)] tracking-[-0.03em] leading-none max-w-[18.3ch] md:max-w-[9.2em] mt-40 md:mt-0">Crafting digital experiences through code and creative design</motion.h1>
           <div className="flex flex-row items-center mt-10 gap-6">
-            <motion.div initial={{ opacity: 0, y: `100%` }} animate={{ opacity: 1, y: 0 }} transition={{
+            <motion.div initial={{ opacity: 0, y: `100%` }} animate={ready ? { opacity: 1, y: 0 } : undefined} transition={{
               duration: 0.6,
               delay: 0.8,
               ease: [0.22, 1, 0.36, 1]
@@ -54,7 +57,7 @@ const Hero: FC = () => {
                 </Button>
               </a>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: `100%` }} animate={{ opacity: 1, y: 0 }} transition={{
+            <motion.div initial={{ opacity: 0, y: `100%` }} animate={ready ? { opacity: 1, y: 0 } : undefined} transition={{
               duration: 0.6,
               delay: 0.95,
               ease: [0.22, 1, 0.36, 1]

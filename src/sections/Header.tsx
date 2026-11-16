@@ -4,6 +4,7 @@ import ArrowUpRightIcon from "@/components/ArrowUpRightIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useSmoothScroll } from "@/components/SmoothScroll";
 import Magnetic from "@/components/Magnetic";
+import SignatureLogo from "@/components/SignatureLogo";
 import { socialLinks } from "@/data/socials";
 import { FC, MouseEvent, useEffect, useState } from "react";
 import { motion, useAnimate } from "motion/react"
@@ -166,17 +167,23 @@ const Header: FC = () => {
       <div className="container !max-w-full">
         <div className="flex justify-between h-20 items-center">
           <div>
-            <a href="/">
-              <span className="text-xl font-bold uppercase text-white">Mo Dev.</span>
+            <a href="/" aria-label="Mo Dev — home">
+              {/* Signature inverts with the page (mix-blend-difference); its dot is drawn in the layer below */}
+              <SignatureLogo textClassName="text-white" dotClassName="opacity-0" />
             </a>
           </div>
         </div>
       </div>
     </div>
-    <div className="fixed top-0 left-0 w-full z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+    {/* Clicks pass through this full-width layer (so the logo link below works); only the buttons catch them */}
+    <div className="fixed top-0 left-0 w-full z-10 pointer-events-none" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <div className="container !max-w-full">
-        <div className="flex justify-end h-20 items-center">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between h-20 items-center">
+          {/* Same logo, invisible text: only the orange dot shows, outside the blend so it stays orange */}
+          <span className="pointer-events-none" aria-hidden="true">
+            <SignatureLogo textClassName="text-transparent select-none" />
+          </span>
+          <div className="flex items-center gap-4 pointer-events-auto">
             <Magnetic>
               <ThemeToggle />
             </Magnetic>

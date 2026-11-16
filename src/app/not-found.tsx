@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import Button from "@/components/Button";
 import ThemeToggle from "@/components/ThemeToggle";
+import SignatureLogo from "@/components/SignatureLogo";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -20,8 +21,8 @@ export default function NotFound() {
       <header className="fixed top-0 left-0 w-full backdrop-blur-md z-40" style={{ paddingTop: "env(safe-area-inset-top)" }}>
         <div className="container !max-w-full">
           <div className="flex justify-between h-20 items-center">
-            <Link href="/">
-              <span className="text-xl font-bold uppercase">Mo Dev.</span>
+            <Link href="/" aria-label="Mo Dev — home">
+              <SignatureLogo />
             </Link>
             <ThemeToggle />
           </div>
