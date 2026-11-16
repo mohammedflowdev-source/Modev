@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useSmoothScroll } from "@/components/SmoothScroll";
 import Magnetic from "@/components/Magnetic";
+import { socialLinks } from "@/data/socials";
 import { FC, MouseEvent, useEffect, useState } from "react";
 import { motion, useAnimate } from "motion/react"
 
@@ -141,6 +142,13 @@ const Header: FC = () => {
           </a>
         ))}
       </nav>
+      <div className="container !max-w-full flex gap-8 py-8">
+        {socialLinks.map(({ label, href }) => (
+          <a href={href} key={label} target="_blank" rel="noopener noreferrer" aria-label={`${label} (opens in a new tab)`}>
+            <Button as="span" variant="text" className="text-sm tracking-widest text-stone-400 hover:text-stone-100">{label} &#8599;</Button>
+          </a>
+        ))}
+      </div>
     </div>
     <div className="fixed top-0 left-0 w-full backdrop-blur-md z-10 pointer-events-none" data-navbar style={{ height: "calc(5rem + env(safe-area-inset-top))", maskImage: "linear-gradient(to bottom, #000 60%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 60%, transparent)" }} aria-hidden="true" />
     <div className="fixed top-0 left-0 w-full mix-blend-difference z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>

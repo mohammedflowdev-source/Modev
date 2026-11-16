@@ -5,6 +5,7 @@ import { useInView } from "motion/react";
 import { FC, useEffect, MouseEvent } from "react";
 import { useSmoothScroll } from "@/components/SmoothScroll";
 import SectionLabel from "@/components/SectionLabel";
+import { socialLinks } from "@/data/socials";
 
 
 const navItems = [
@@ -79,6 +80,13 @@ const Footer: FC = () => {
                 mohammedflow.dev@gmail.com
               </Button>
             </a>
+            <div className="flex flex-wrap gap-8 mt-8">
+              {socialLinks.map(({ label, href }) => (
+                <a href={href} key={label} target="_blank" rel="noopener noreferrer" aria-label={`${label} (opens in a new tab)`}>
+                  <Button as="span" variant="text" className="text-sm md:text-base">{label} &#8599;</Button>
+                </a>
+              ))}
+            </div>
           </div>
           <div className="md:col-span-1">
             <nav className="flex flex-col md:items-end gap-8 mt-16 md:mt-0">
