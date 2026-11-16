@@ -59,7 +59,7 @@ const FAQs: FC = () => {
     open: { opacity: 1, y: 0, transition: { duration: reduceMotion ? 0 : 0.45, delay: reduceMotion ? 0 : 0.1, ease: EASE } },
   }
   // Shared timing for the CSS transitions so icon, fill and shift move with the height.
-  const cssMotion = "duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+  const cssMotion = "duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
 
   return <section className="section" id="faqs">
     <div className="container">
@@ -71,19 +71,22 @@ const FAQs: FC = () => {
           const buttonId = `faq-question-${faqIndex}`
           const answerId = `faq-answer-${faqIndex}`
           return (
-            <div key={question} className="py-6 md:py-8 lg:py-10 relative isolate group/faq" onClick={() => {
+            <div key={question} data-open={isOpen} className={twMerge("py-6 md:py-8 lg:py-10 relative isolate group/faq transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none", selectedIndex !== null && !isOpen && "[@media(hover:none)]:opacity-50")} onClick={() => {
               setSelectedIndex(isOpen ? null : faqIndex)
             }}>
-              {/* Divider draws left → right on entrance */}
+              {/* Touch devices: 2px orange line draws down the left edge while open (retracts on close) */}
+              <div className="hidden [@media(hover:none)]:block absolute left-0 top-0 bottom-0 w-[2px] bg-red-orange-500 origin-top scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none group-data-[open=true]/faq:scale-y-100" aria-hidden="true" />
+              {/* Divider draws left → right on entrance; sits under the fill, exactly the row width */}
               <motion.div
-                className="absolute top-0 left-0 h-px w-full bg-stone-900/15 dark:bg-stone-100/15 origin-left"
+                className="absolute top-0 inset-x-0 h-px -z-20 bg-stone-900/15 dark:bg-stone-100/15 origin-left"
                 initial={{ scaleX: reduceMotion ? 1 : 0 }}
                 animate={showRows ? { scaleX: 1 } : undefined}
                 transition={{ duration: 0.8, delay: rowDelay(faqIndex), ease: EASE }}
               />
-              {/* Hover / open fill — only on devices with real hover (no stuck grey on touch) */}
-              <div className={twMerge("absolute h-0 w-full bottom-0 left-0 bg-stone-300 dark:bg-stone-800 -z-10 transition-[height]", cssMotion, "[@media(hover:hover)]:group-hover/faq:h-full", isOpen && "[@media(hover:hover)]:h-full")}></div>
+              {/* Hover / open fill (same as Services) — only on devices with real hover (no stuck fill on touch) */}
+              <div className={twMerge("absolute h-0 inset-x-0 bottom-0 bg-stone-900 dark:bg-stone-800 -z-10 transition-[height]", cssMotion, "[@media(hover:hover)]:group-hover/faq:h-full [@media(hover:hover)]:group-data-[open=true]/faq:h-full")} aria-hidden="true"></div>
               <motion.div
+                className="transition-[padding] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none [@media(hover:none)]:group-data-[open=true]/faq:pl-4"
                 initial={{ opacity: reduceMotion ? 1 : 0, y: reduceMotion ? 0 : 16 }}
                 animate={showRows ? { opacity: 1, y: 0 } : undefined}
                 transition={{ duration: 0.6, delay: rowDelay(faqIndex) + (reduceMotion ? 0 : 0.1), ease: EASE }}
@@ -95,8 +98,8 @@ const FAQs: FC = () => {
                   aria-controls={isOpen ? answerId : undefined}
                   className="w-full text-left flex items-center justify-between gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-orange-500"
                 >
-                  <span className={twMerge("text-2xl md:text-3xl lg:text-4xl lg:pr-8 transition-transform", cssMotion, "lg:[@media(hover:hover)]:group-hover/faq:translate-x-8", isOpen && "lg:translate-x-8")}>{question}</span>
-                  <span className={twMerge("inline-flex items-center justify-center size-11 border border-stone-400 dark:border-stone-600 rounded-full shrink-0 bg-stone-200 dark:bg-stone-800 transition-[transform,background-color,border-color,color]", cssMotion, "lg:[@media(hover:hover)]:group-hover/faq:-translate-x-8", isOpen && "rotate-45 lg:-translate-x-8 bg-red-orange-500 dark:bg-red-orange-500 border-red-orange-500 dark:border-red-orange-500 text-white")}>
+                  <span className={twMerge("text-2xl md:text-3xl lg:text-4xl lg:pr-8 transition-[transform,color]", cssMotion, "lg:[@media(hover:hover)]:group-hover/faq:translate-x-8 [@media(hover:hover)]:group-hover/faq:text-stone-100 [@media(hover:hover)]:group-data-[open=true]/faq:text-stone-100", isOpen && "lg:translate-x-8")}>{question}</span>
+                  <span className={twMerge("inline-flex items-center justify-center size-11 border border-stone-400 dark:border-stone-600 rounded-full shrink-0 bg-stone-200 dark:bg-stone-800 transition-[transform,background-color,border-color,color]", cssMotion, "lg:[@media(hover:hover)]:group-hover/faq:-translate-x-8", !isOpen && "[@media(hover:hover)]:group-hover/faq:border-stone-300 [@media(hover:hover)]:group-hover/faq:bg-transparent [@media(hover:hover)]:group-hover/faq:text-stone-100", isOpen && "rotate-45 lg:-translate-x-8 bg-red-orange-500 dark:bg-red-orange-500 border-red-orange-500 dark:border-red-orange-500 text-white")}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
@@ -114,7 +117,7 @@ const FAQs: FC = () => {
                       animate="open"
                       exit="collapsed"
                     >
-                      <motion.p variants={answerTextVariants} className="text-base md:text-lg text-stone-600 dark:text-stone-400 max-w-[60ch] leading-relaxed pt-4 pb-2 md:pb-4">{answer}</motion.p>
+                      <motion.p variants={answerTextVariants} className="text-base md:text-lg text-stone-600 dark:text-stone-400 [@media(hover:hover)]:group-data-[open=true]/faq:text-stone-300 max-w-[60ch] leading-relaxed pt-4 pb-2 md:pb-4">{answer}</motion.p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -124,7 +127,7 @@ const FAQs: FC = () => {
         })}
         {/* Closing divider under the last row */}
         <motion.div
-          className="h-px w-full bg-stone-900/15 dark:bg-stone-100/15 origin-left"
+          className="relative -z-20 h-px w-full bg-stone-900/15 dark:bg-stone-100/15 origin-left"
           initial={{ scaleX: reduceMotion ? 1 : 0 }}
           animate={showRows ? { scaleX: 1 } : undefined}
           transition={{ duration: 0.8, delay: rowDelay(faqs.length), ease: EASE }}
