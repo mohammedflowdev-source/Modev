@@ -63,16 +63,17 @@ export default function ContactPage() {
         <div className="container !max-w-full">
           <div className="flex justify-between h-20 items-center">
             <Link href="/">
-              <span className="text-xl font-bold uppercase tracking-wider">
-                Mo&nbsp; Dev.
+              <span className="text-xl font-bold uppercase">
+                Mo Dev.
               </span>
             </Link>
 
             <div className="flex items-center gap-4">
               <ThemeToggle />
-              <Link href="/">
+              <Link href="/" aria-label="Back to home">
                 <Button
                   variant="secondary"
+                  className="max-md:size-11 max-md:px-0 max-md:gap-0 max-md:rounded-full max-md:justify-center"
                   iconAfter={
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +91,7 @@ export default function ContactPage() {
                     </svg>
                   }
                 >
-                  Back to Home
+                  <span className="hidden md:inline">Back to Home</span>
                 </Button>
               </Link>
             </div>

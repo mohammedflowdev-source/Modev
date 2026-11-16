@@ -16,8 +16,9 @@ const useTextRevealAnimation = () => {
         return animate(scope.current.querySelectorAll('.word'), {
             transform: 'translateY(0)'
         }, {
-            duration: 0.5,
-            delay: stagger(.15)
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+            delay: stagger(.04)
         })
     }
 

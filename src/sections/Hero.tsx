@@ -30,11 +30,12 @@ const Hero: FC = () => {
     <div className="grid md:grid-cols-12 md:h-screen items-stretch sticky top-0">
       <div className="md:col-span-7 flex flex-col justify-center">
         <div className="container !max-w-full">
-          <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} ref={scope} className="text-5xl md:text-6xl lg:text-7xl mt-40 md:mt-0">Crafting digital experiences through code and creative design</motion.h1>
-          <div className="flex flex-col md:flex-row md:items-center mt-10 items-start gap-6">
+          <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} ref={scope} className="text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em] leading-none mt-40 md:mt-0">Crafting digital experiences through code and creative design</motion.h1>
+          <div className="flex flex-row items-center mt-10 gap-6">
             <motion.div initial={{ opacity: 0, y: `100%` }} animate={{ opacity: 1, y: 0 }} transition={{
-              duration: 0.5,
-              delay: 1.75
+              duration: 0.6,
+              delay: 0.8,
+              ease: [0.22, 1, 0.36, 1]
             }}>
               <a href="#projects">
                 <Button variant="secondary" iconAfter={<div className="overflow-hidden size-5">
@@ -52,8 +53,9 @@ const Hero: FC = () => {
               </a>
             </motion.div>
             <motion.div initial={{ opacity: 0, y: `100%` }} animate={{ opacity: 1, y: 0 }} transition={{
-              duration: 0.5,
-              delay: 2.2
+              duration: 0.6,
+              delay: 0.95,
+              ease: [0.22, 1, 0.36, 1]
             }}>
               <a href="/contact">
                 <Button variant="text">Let&apos;s Talk</Button>
@@ -63,10 +65,10 @@ const Hero: FC = () => {
         </div>
       </div>
       <div className="md:col-span-5 relative">
-        <motion.div className="mt-20 md:mt-0 md:size-full md:absolute md:right-0 max-md:!w-full" style={{
+        <motion.div className="mt-12 md:mt-0 md:size-full md:absolute md:right-0 max-md:!w-full" style={{
           width: portraitWidth
         }}>
-          <Image src={heroImage} alt="my portrait" className="size-full object-cover" />
+          <Image src={heroImage} alt="my portrait" className="size-full object-cover" priority sizes="100vw" placeholder="blur" />
         </motion.div>
       </div>
     </div>

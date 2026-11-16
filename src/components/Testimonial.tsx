@@ -55,7 +55,7 @@ export default function Testimoial(props: {
                 >
 
                 </motion.div>
-                <Image src={image} alt={name} className="size-full object-cover" style={{
+                <Image src={image} alt={name} className="size-full object-cover grayscale" style={{
                     objectPosition: `50% ${imagePositionY * 100}%`
                 }} />
             </div>
@@ -65,7 +65,7 @@ export default function Testimoial(props: {
                     {quote}
                     <span>&rdquo;</span>
                 </div>
-                <cite className="mt-4 md:mt-8 not-italic text-xl block md:text-lg lg:text-xl" ref={citeScope}>{name},{role} at {company}</cite>
+                <cite className="mt-4 md:mt-8 not-italic text-xl block md:text-lg lg:text-xl" ref={citeScope}>{`${name}, ${role} at ${company}`}</cite>
             </blockquote>
         </div>
     </>

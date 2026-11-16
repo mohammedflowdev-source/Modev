@@ -141,13 +141,13 @@ const Header: FC = () => {
         ))}
       </nav>
     </div>
-    <div className="fixed top-0 left-0 w-full backdrop-blur-md z-10 pointer-events-none" data-navbar style={{ height: "calc(5rem + env(safe-area-inset-top))" }} aria-hidden="true" />
+    <div className="fixed top-0 left-0 w-full backdrop-blur-md z-10 pointer-events-none" data-navbar style={{ height: "calc(5rem + env(safe-area-inset-top))", maskImage: "linear-gradient(to bottom, #000 60%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 60%, transparent)" }} aria-hidden="true" />
     <div className="fixed top-0 left-0 w-full mix-blend-difference z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <div className="container !max-w-full">
         <div className="flex justify-between h-20 items-center">
           <div>
             <a href="/">
-              <span className="text-xl font-bold uppercase text-white">Mo&nbsp; Dev.</span>
+              <span className="text-xl font-bold uppercase text-white">Mo Dev.</span>
             </a>
           </div>
         </div>

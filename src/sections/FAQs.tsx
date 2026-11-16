@@ -34,7 +34,7 @@ const FAQs: FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   return <section className="section" id="faqs">
     <div className="container">
-      <h2 className="text-4xl md:text-7xl lg:text-8xl">FAQs</h2>
+      <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none">FAQs</h2>
       <div className="mt-10 md:mt-16 lg:mt-20">
         {faqs.map(({ question, answer }, faqIndex) => (
           <div key={question} className="border-t border-stone-400 dark:border-stone-700 border-dotted py-6 md:py-8 lg:py-10 last:border-b relative isolate group/faq" onClick={() => {

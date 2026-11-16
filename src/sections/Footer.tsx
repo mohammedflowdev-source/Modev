@@ -55,7 +55,7 @@ const Footer: FC = () => {
           <span className="uppercase">One spot available for next month</span></div>
         <div className="grid md:grid-cols-3 md:items-center">
           <div className="md:col-span-2">
-            <h2 className="text-4xl md:text-7xl lg:text-8xl mt-8 font-extralight" ref={scope}>Enough talk. Let&apos;s make something great together.</h2>
+            <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none mt-8 font-extralight" ref={scope}>Enough talk. Let&apos;s make something great together.</h2>
             <a href="/contact">
               <Button
                 className="mt-8 text-sm px-4 md:text-base md:px-6"
@@ -90,7 +90,10 @@ const Footer: FC = () => {
         </div>
 
       </div>
-      <p className="py-16 text-white/30 text-sm">Copyright &copy; Mo Dev &bull; All rights reserved</p>
+      <div className="py-8 border-t border-white/10 flex items-center justify-between gap-4 text-sm text-white/60">
+        <p>Copyright &copy; Mo Dev &bull; All rights reserved</p>
+        <a href="#" className="shrink-0 hover:text-white transition-colors duration-300">Back to top &uarr;</a>
+      </div>
     </div>
   </footer>;
 };
