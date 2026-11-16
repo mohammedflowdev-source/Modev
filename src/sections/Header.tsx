@@ -1,5 +1,6 @@
 "use client"
 import Button from "@/components/Button";
+import ArrowUpRightIcon from "@/components/ArrowUpRightIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useSmoothScroll } from "@/components/SmoothScroll";
 import Magnetic from "@/components/Magnetic";
@@ -145,7 +146,7 @@ const Header: FC = () => {
       <div className="container !max-w-full flex gap-8 py-8">
         {socialLinks.map(({ label, href }) => (
           <a href={href} key={label} target="_blank" rel="noopener noreferrer" aria-label={`${label} (opens in a new tab)`}>
-            <Button as="span" variant="text" className="text-sm tracking-widest text-stone-400 hover:text-stone-100">{label} &#8599;</Button>
+            <Button as="span" variant="text" className="text-sm tracking-widest text-stone-400 hover:text-stone-100 gap-1" iconAfter={<ArrowUpRightIcon />}>{label}</Button>
           </a>
         ))}
       </div>

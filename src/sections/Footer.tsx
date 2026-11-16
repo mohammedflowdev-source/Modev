@@ -1,5 +1,6 @@
 "use client"
 import Button from "@/components/Button";
+import ArrowUpRightIcon from "@/components/ArrowUpRightIcon";
 import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
 import { useInView } from "motion/react";
 import { FC, useEffect, MouseEvent } from "react";
@@ -83,7 +84,7 @@ const Footer: FC = () => {
             <div className="flex flex-wrap gap-8 mt-8">
               {socialLinks.map(({ label, href }) => (
                 <a href={href} key={label} target="_blank" rel="noopener noreferrer" aria-label={`${label} (opens in a new tab)`}>
-                  <Button as="span" variant="text" className="text-sm md:text-base">{label} &#8599;</Button>
+                  <Button as="span" variant="text" className="text-sm md:text-base gap-1" iconAfter={<ArrowUpRightIcon />}>{label}</Button>
                 </a>
               ))}
             </div>
