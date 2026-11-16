@@ -5,15 +5,20 @@ import Hero from "@/sections/Hero";
 import Intro from "@/sections/Intro"
 import Projects from "@/sections/Projects"
 import Testimonials from "@/sections/Testimonials";
+import Marquee from "@/components/Marquee";
 export default function Home() {
   return (
     <>
       <Header />
-      <Hero />
-      <Intro />
-      <Projects />
-      <Testimonials />
-      <FAQs />
+      {/* Page content sits above the footer and slides up to uncover it (curtain reveal). */}
+      <main className="relative z-[1] bg-[var(--page-bg)] transition-colors duration-500">
+        <Hero />
+        <Intro />
+        <Projects />
+        <Testimonials />
+        <FAQs />
+        <Marquee />
+      </main>
       <Footer />
     </>
   );

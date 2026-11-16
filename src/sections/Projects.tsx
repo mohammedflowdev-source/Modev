@@ -117,6 +117,7 @@ const Projects: FC = () => {
           <a
             href={href}
             key={name}
+            data-cursor="View"
             target="_blank"
             rel="noopener noreferrer"
             className="group/project block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-red-orange-500"

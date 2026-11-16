@@ -1,7 +1,7 @@
 "use client";
 import { FC, useEffect, useRef } from "react";
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-import heroImage from "@/assets/images/WhatsApp Image 2026-11-15 at 10.33.17 PM.jpg";
+import heroImage from "@/assets/images/hero-portrait.jpg";
 import Image from "next/image";
 import Button from "@/components/Button"
 

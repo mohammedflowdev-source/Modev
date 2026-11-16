@@ -13,7 +13,7 @@ const faqs = [
   {
     question: "How long does it take to build a website?",
     answer:
-      "It depends on the complexity of the website and the scope of the project.",
+      "Most landing pages and portfolios take 1–2 weeks, and larger sites or web apps 3–6 weeks. After a quick call about your goals, I'll send a clear timeline with milestones so you always know what's next.",
   },
   {
     question: "What is your development process like?",

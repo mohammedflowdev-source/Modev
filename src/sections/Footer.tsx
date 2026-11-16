@@ -3,10 +3,11 @@ import Button from "@/components/Button";
 import ArrowUpRightIcon from "@/components/ArrowUpRightIcon";
 import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
 import { useInView } from "motion/react";
-import { FC, useEffect, MouseEvent } from "react";
+import { FC, useEffect, useRef, useState, MouseEvent } from "react";
 import { useSmoothScroll } from "@/components/SmoothScroll";
 import SectionLabel from "@/components/SectionLabel";
 import { socialLinks } from "@/data/socials";
+import LocalTime from "@/components/LocalTime";
 
 
 const navItems = [
@@ -24,7 +25,7 @@ const navItems = [
   },
   {
     href: `#faqs`,
-    label: `Faqs`,
+    label: `FAQs`,
   },
   {
     href: `#contact`,
@@ -36,6 +37,25 @@ const Footer: FC = () => {
   const { scope, entranceAnimation } = useTextRevealAnimation()
   const inView = useInView(scope);
   const { scrollToHash } = useSmoothScroll()
+
+  // Curtain reveal (footer pinned under the page) only when the whole footer fits in the window;
+  // on phones and short screens it is taller than the viewport, so it stays a normal footer.
+  const footerRef = useRef<HTMLElement>(null)
+  const [fitsViewport, setFitsViewport] = useState(false)
+  useEffect(() => {
+    const check = () => {
+      const footer = footerRef.current
+      if (footer) setFitsViewport(footer.offsetHeight <= window.innerHeight)
+    }
+    check()
+    const observer = new ResizeObserver(check)
+    if (footerRef.current) observer.observe(footerRef.current)
+    window.addEventListener("resize", check)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", check)
+    }
+  }, [])
   const handleClickNavItem = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const url = new URL(e.currentTarget.href);
@@ -50,9 +70,9 @@ const Footer: FC = () => {
       entranceAnimation();
     }
   }, [inView, entranceAnimation])
-  return <footer className="bg-stone-900 text-white" id="contact">
+  return <footer ref={footerRef} className={`bg-stone-900 text-white ${fitsViewport ? "sticky bottom-0 z-0" : "relative"}`} id="contact">
     <div className="container">
-      <div className="section">
+      <div className="py-24 md:py-28 lg:py-24">
         <SectionLabel index="05" label="Contact" className="text-white/60 dark:text-white/60" />
         <div className="flex items-center gap-3">
           <div className="size-3 rounded-full bg-green-400 animate-pulse"></div>
@@ -102,8 +122,11 @@ const Footer: FC = () => {
         </div>
 
       </div>
-      <div className="py-8 border-t border-white/10 flex items-center justify-between gap-4 text-sm text-white/60">
-        <p>Copyright &copy; Mo Dev &bull; All rights reserved</p>
+      <div className="py-8 border-t border-white/10 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 text-sm text-white/60">
+        <div className="flex flex-col gap-1 md:flex-row md:gap-4">
+          <p>Copyright &copy; Mo Dev &bull; All rights reserved</p>
+          <p><LocalTime /> &middot; Working with clients worldwide</p>
+        </div>
         <a href="#" className="shrink-0 hover:text-white transition-colors duration-300">Back to top &uarr;</a>
       </div>
     </div>
