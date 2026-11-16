@@ -1,7 +1,11 @@
-import { FC } from "react";
+"use client";
+import { FC, PointerEvent, useState } from "react";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "motion/react";
+import useFinePointerMotion from "@/hooks/useFinePointerMotion";
 import image1 from "@/assets/images/project-1.jpg";
 import image2 from "@/assets/images/project-2.jpg";
 import Image from "next/image";
+import SectionLabel from "@/components/SectionLabel";
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const projects = [
@@ -19,14 +23,53 @@ const projects = [
 ];
 
 const Projects: FC = () => {
+  // Cursor-following preview (desktop mouse/trackpad only, off with reduced motion).
+  const followCursor = useFinePointerMotion()
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const cursorX = useMotionValue(0)
+  const cursorY = useMotionValue(0)
+  const previewX = useSpring(cursorX, { stiffness: 250, damping: 30, mass: 0.5 })
+  const previewY = useSpring(cursorY, { stiffness: 250, damping: 30, mass: 0.5 })
+
+  const handlePointerMove = (e: PointerEvent<HTMLAnchorElement>) => {
+    cursorX.set(e.clientX)
+    cursorY.set(e.clientY)
+  }
+
   return <section className="section" id="projects">
+    {followCursor && (
+      <motion.div
+        className="fixed top-0 left-0 z-[5] w-80 aspect-video -ml-40 -mt-[90px] pointer-events-none"
+        style={{ x: previewX, y: previewY }}
+        aria-hidden="true"
+      >
+        <AnimatePresence>
+          {activeIndex !== null && (
+            <motion.div
+              key={activeIndex}
+              className="absolute inset-0 overflow-hidden"
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Image src={projects[activeIndex].image} alt="" className="size-full object-cover" sizes="320px" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    )}
     <div className="container">
+      <SectionLabel index="02" label="Selected Works" />
       <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none">Selected works</h2>
       <div className="mt-10 md:mt-16 lg:mt-20">
-        {projects.map(({ name, image, href }) => (
+        {projects.map(({ name, image, href }, projectIndex) => (
           <a
             href={href}
             key={name}
+            onPointerEnter={(e) => { handlePointerMove(e); setActiveIndex(projectIndex) }}
+            onPointerMove={handlePointerMove}
+            onPointerLeave={() => setActiveIndex(null)}
             target={href !== "#" ? "_blank" : undefined}
             rel={href !== "#" ? "noopener noreferrer" : undefined}
             className="border-t last:border-b py-6 md:py-8 border-stone-400 dark:border-stone-700 border-dotted flex flex-col lg:py-10 relative group/project"
@@ -42,9 +85,9 @@ const Projects: FC = () => {
                   <h3 className="text-2xl md:text-3xl lg:text-4xl">{name}</h3>
                 </div>
                 <div className="relative">
-                  <div className="absolute aspect-video w-full top-1/2 -translate-y-1/2 opacity-0 scale-90 group-hover/project:opacity-100  group-hover/project:scale-100 lg:group-hover/project:scale-110 transition-all duration-500 z-10">
+                  {!followCursor && <div className="absolute aspect-video w-full top-1/2 -translate-y-1/2 opacity-0 scale-90 group-hover/project:opacity-100  group-hover/project:scale-100 lg:group-hover/project:scale-110 transition-all duration-500 z-10">
                     <Image src={image} alt={`${name} image`} className="size-full object-cover" />
-                  </div>
+                  </div>}
                 </div>
                 <div className="lg:group-hover/project:pr-8 transition-all duration-700">
                   <div className="size-6 overflow-hidden">

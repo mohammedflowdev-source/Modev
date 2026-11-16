@@ -38,7 +38,7 @@ const Hero: FC = () => {
               ease: [0.22, 1, 0.36, 1]
             }}>
               <a href="#projects">
-                <Button variant="secondary" iconAfter={<div className="overflow-hidden size-5">
+                <Button as="span" variant="secondary" iconAfter={<div className="overflow-hidden size-5">
                   <div className="h-5 w-10 flex group-hover/button:-translate-x-1/2 transition-transform duration-500">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
@@ -58,7 +58,7 @@ const Hero: FC = () => {
               ease: [0.22, 1, 0.36, 1]
             }}>
               <a href="/contact">
-                <Button variant="text">Let&apos;s Talk</Button>
+                <Button as="span" variant="text">Let&apos;s Talk</Button>
               </a>
             </motion.div>
           </div>
@@ -72,7 +72,7 @@ const Hero: FC = () => {
         </motion.div>
       </div>
     </div>
-    <div className="md:h-[200vh]" ref={scrollingDiv}>
+    <div className="md:h-[120vh]" ref={scrollingDiv}>
 
     </div>
 

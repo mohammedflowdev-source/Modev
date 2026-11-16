@@ -4,6 +4,7 @@ import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
 import { useInView } from "motion/react";
 import { FC, useEffect, MouseEvent } from "react";
 import { useSmoothScroll } from "@/components/SmoothScroll";
+import SectionLabel from "@/components/SectionLabel";
 
 
 const navItems = [
@@ -50,6 +51,7 @@ const Footer: FC = () => {
   return <footer className="bg-stone-900 text-white" id="contact">
     <div className="container">
       <div className="section">
+        <SectionLabel index="05" label="Contact" className="text-white/60 dark:text-white/60" />
         <div className="flex items-center gap-3">
           <div className="size-3 rounded-full bg-green-400 animate-pulse"></div>
           <span className="uppercase">One spot available for next month</span></div>
@@ -58,6 +60,7 @@ const Footer: FC = () => {
             <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none mt-8 font-extralight" ref={scope}>Enough talk. Let&apos;s make something great together.</h2>
             <a href="/contact">
               <Button
+                as="span"
                 className="mt-8 text-sm px-4 md:text-base md:px-6"
                 variant="secondary"
                 iconAfter={
@@ -81,7 +84,7 @@ const Footer: FC = () => {
             <nav className="flex flex-col md:items-end gap-8 mt-16 md:mt-0">
               {navItems.map(({ href, label }) => (
                 <a href={href} key={label} onClick={handleClickNavItem}>
-                  <Button variant="text" className="text-lg">{label}</Button>
+                  <Button as="span" variant="text" className="text-lg">{label}</Button>
                 </a>
               ))}
             </nav>

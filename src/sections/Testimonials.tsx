@@ -5,6 +5,7 @@ import image1 from "@/assets/images/testimonial-1.jpg";
 
 import { useScroll, motion, useTransform, AnimatePresence } from "motion/react";
 import Testimoial from "@/components/Testimonial";
+import SectionLabel from "@/components/SectionLabel";
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const testimonials = [
@@ -48,6 +49,9 @@ const Testimonials: FC = () => {
 
 
   return <section className="section" id="testimonials">
+    <div className="container">
+      <SectionLabel index="03" label="Testimonials" />
+    </div>
     <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none flex flex-col overflow-hidden" ref={titleRef}>
       <motion.span className="whitespace-nowrap" style={{
         x: transformTop

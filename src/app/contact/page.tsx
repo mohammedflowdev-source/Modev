@@ -72,6 +72,7 @@ export default function ContactPage() {
               <ThemeToggle />
               <Link href="/" aria-label="Back to home">
                 <Button
+                  as="span"
                   variant="secondary"
                   className="max-md:size-11 max-md:px-0 max-md:gap-0 max-md:rounded-full max-md:justify-center"
                   iconAfter={
