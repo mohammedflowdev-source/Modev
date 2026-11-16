@@ -64,7 +64,7 @@ export default function Testimoial(props: {
                 }} />
             </div>
             <blockquote className="md:col-span-3">
-                <div className="text-3xl md:text-5xl lg:text-6xl mt-8 md:mt-0" ref={quoteScope}>
+                <div className="text-3xl md:text-5xl lg:text-6xl tracking-[-0.03em] mt-8 md:mt-0" ref={quoteScope}>
                     <span>&ldquo;</span>
                     {quote}
                     <span>&rdquo;</span>

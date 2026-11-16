@@ -151,8 +151,10 @@ const Header: FC = () => {
         ))}
       </div>
     </div>
-    <div className="fixed top-0 left-0 w-full backdrop-blur-md z-10 pointer-events-none" data-navbar style={{ height: "calc(5rem + env(safe-area-inset-top))", maskImage: "linear-gradient(to bottom, #000 60%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 60%, transparent)" }} aria-hidden="true" />
-    <div className="fixed top-0 left-0 w-full mix-blend-difference z-10" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+    {/* Blur strip: 1rem taller than the navbar so the fade (set from the bottom, not in %) ends before the
+        strip's edge — keeps the logo row fully blurred under the iPhone status bar and hides WebKit's edge streaks. */}
+    <div className="fixed top-0 left-0 w-full backdrop-blur-md z-10 pointer-events-none" style={{ height: "calc(6rem + env(safe-area-inset-top))", maskImage: "linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent calc(100% - 1rem))", WebkitMaskImage: "linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent calc(100% - 1rem))" }} aria-hidden="true" />
+    <div className="fixed top-0 left-0 w-full mix-blend-difference z-10" data-navbar style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <div className="container !max-w-full">
         <div className="flex justify-between h-20 items-center">
           <div>

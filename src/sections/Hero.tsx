@@ -30,7 +30,7 @@ const Hero: FC = () => {
     <div className="grid md:grid-cols-12 md:h-screen items-stretch sticky top-0">
       <div className="md:col-span-7 flex flex-col justify-center">
         <div className="container !max-w-full">
-          <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} ref={scope} className="text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em] leading-none mt-40 md:mt-0">Crafting digital experiences through code and creative design</motion.h1>
+          <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} ref={scope} className="text-[3.0625rem] md:text-6xl lg:text-[length:clamp(3rem,calc(5.3vw-12px),7rem)] tracking-[-0.03em] leading-none max-w-[18.3ch] mt-40 md:mt-0">Crafting digital experiences through code and creative design</motion.h1>
           <div className="flex flex-row items-center mt-10 gap-6">
             <motion.div initial={{ opacity: 0, y: `100%` }} animate={{ opacity: 1, y: 0 }} transition={{
               duration: 0.6,
