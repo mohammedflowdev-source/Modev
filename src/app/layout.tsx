@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
+import { Analytics } from "@vercel/analytics/next";
 
 const archivo = Archivo({
   display: "swap",
@@ -28,15 +29,17 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
-  icons: {
-    icon: "/icon.png",
-  },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  // Browser UI colour matches the page background (stone-200 light / stone-950 dark).
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#e7e5e4" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0a09" },
+  ],
 };
 
 export default function RootLayout({
@@ -52,6 +55,7 @@ export default function RootLayout({
           <Cursor />
           <div className="grain" aria-hidden="true" />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

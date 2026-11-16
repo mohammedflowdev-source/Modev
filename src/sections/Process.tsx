@@ -53,7 +53,7 @@ const Dot = ({ active, className }: { active: boolean; className?: string }) => 
 const StepText = ({ index, active, className }: { index: number; active: boolean; className?: string }) => {
   const part = (delay: number) => ({
     initial: false as const,
-    animate: { opacity: active ? 1 : 0.3, y: active ? 0 : 16 },
+    animate: { opacity: active ? 1 : 0.5, y: active ? 0 : 16 },
     transition: { duration: 0.7, ease: EASE, delay: active ? delay : 0 },
   });
   return (

@@ -193,8 +193,9 @@ const Header: FC = () => {
             </button>
             </Magnetic>
             <Magnetic>
-              <a href="/contact">
-                <Button as="span" variant="primary" className="hidden md:inline-flex">Contact me</Button>
+              {/* Hide the whole link on phones (not just its text) so there's no empty, unnamed link */}
+              <a href="/contact" className="hidden md:block">
+                <Button as="span" variant="primary">Contact me</Button>
               </a>
             </Magnetic>
           </div>
