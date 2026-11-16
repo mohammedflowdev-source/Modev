@@ -6,6 +6,15 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Page background, shared by <body> and anything that must blend into it. */
+:root {
+    --page-bg: theme("colors.stone.200");
+}
+
+.dark {
+    --page-bg: theme("colors.stone.950");
+}
+
 
 .section {
     @apply py-24 md:py-32 lg:py-40

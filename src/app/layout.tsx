@@ -45,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased bg-stone-200 text-stone-900 dark:bg-stone-950 dark:text-stone-100 transition-colors duration-500 ${archivo.variable} font-sans`}>
+      <body className={`antialiased bg-[var(--page-bg)] text-stone-900 dark:text-stone-100 transition-colors duration-500 ${archivo.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>

@@ -1,4 +1,7 @@
-import { FC } from "react";
+"use client";
+import { createRef, FC, ReactNode, RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { cubicBezier } from "motion";
 import Image from "next/image";
 import SectionLabel from "@/components/SectionLabel";
 import freshcartDesktop from "@/assets/images/projects/freshcart-desktop.jpg";
@@ -29,13 +32,75 @@ const projects = [
   },
 ];
 
+const EASE = cubicBezier(0.22, 1, 0.36, 1);
+const STACK_QUERY = "(max-width: 767.98px) and (prefers-reduced-motion: no-preference)";
+// Stuck cards sit just below the fixed navbar (80px + iPhone safe area) with a small gap.
+const STICKY_TOP = "calc(5rem + env(safe-area-inset-top) + 1rem)";
+
+/** Phones only: true when cards should stack (below md, motion allowed). */
+const useStackCards = () => {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia(STACK_QUERY);
+    const update = () => setEnabled(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+  return enabled;
+};
+
+/**
+ * Wraps a project card. On phones it becomes a sticky layer; as the next card
+ * slides over it, it scales to 0.95 and fades to 0.4. Elsewhere it is a plain wrapper.
+ */
+const StackCard = ({ children, cardRef, nextRef, enabled }: { children: ReactNode; cardRef: RefObject<HTMLDivElement>; nextRef?: RefObject<HTMLDivElement>; enabled: boolean }) => {
+  // Progress 0 → 1 while the next card travels from the bottom of the screen to its sticky spot.
+  const { scrollYProgress } = useScroll({ target: nextRef ?? cardRef, offset: ["start end", "start start"] });
+  const coverEnd = useRef(0.85);
+  const [, forceRender] = useState(0);
+  useEffect(() => {
+    const measure = () => {
+      const top = cardRef.current ? parseFloat(getComputedStyle(cardRef.current).top) || 0 : 0;
+      coverEnd.current = Math.min(0.99, Math.max(0.5, 1 - top / window.innerHeight));
+      forceRender((n) => n + 1);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [cardRef, enabled]);
+  // Run the effect over the last half of the next card's approach, finishing as it covers this one.
+  const coverRange = [Math.max(0, coverEnd.current - 0.5), coverEnd.current];
+  const scale = useTransform(scrollYProgress, coverRange, [1, 0.95], { ease: EASE });
+  const opacity = useTransform(scrollYProgress, coverRange, [1, 0.4], { ease: EASE });
+
+  const stacking = enabled && !!nextRef;
+  return (
+    <motion.div
+      ref={cardRef}
+      // Same background variable (and theme transition) as <body>, so the wrapper is invisible.
+      className={enabled ? "sticky self-start bg-[var(--page-bg)] transition-colors duration-500 origin-top" : undefined}
+      style={enabled ? {
+        top: STICKY_TOP,
+        scale: stacking ? scale : 1,
+        opacity: stacking ? opacity : 1,
+      } : undefined}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
 const Projects: FC = () => {
+  const stackCards = useStackCards()
+  const cardRefs = useMemo(() => projects.map(() => createRef<HTMLDivElement>()), [])
   return <section className="section" id="projects">
     <div className="container">
       <SectionLabel index="02" label="Selected Works" />
       <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none">Selected works</h2>
       <div className="mt-10 md:mt-16 lg:mt-20 grid md:grid-cols-2 gap-x-8 lg:gap-x-12 gap-y-16 md:gap-y-20">
-        {projects.map(({ name, description, note, year, tags, desktopImage, mobileImage, href }) => (
+        {projects.map(({ name, description, note, year, tags, desktopImage, mobileImage, href }, index) => (
+          <StackCard key={name} cardRef={cardRefs[index]} nextRef={cardRefs[index + 1]} enabled={stackCards}>
           <a
             href={href}
             key={name}
@@ -88,6 +153,7 @@ const Projects: FC = () => {
               </div>
             </div>
           </a>
+          </StackCard>
         ))}
       </div>
     </div>
