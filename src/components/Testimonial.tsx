@@ -1,8 +1,8 @@
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import { HTMLAttributes, useEffect } from "react";
+import { HTMLAttributes, useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
-import { usePresence, motion } from "motion/react";
+import { usePresence, motion, useInView } from "motion/react";
 import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
 
 export default function Testimoial(props: {
@@ -21,6 +21,10 @@ export default function Testimoial(props: {
 
     const { scope: citeScope, entranceAnimation: citeEnteranceAnimation, exitAnimation: citeExitAnimation } = useTextRevealAnimation()
     const [isPresent, safeToRemove] = usePresence()
+
+    // Phones (no hover): the photo turns to color while it is in view.
+    const photoRef = useRef<HTMLDivElement>(null)
+    const photoInView = useInView(photoRef, { amount: 0.6 })
 
     //const [quoteScope, quoteAnimate] = useAnimate()
     //const [citeScope, citeAnimate] = useAnimate()
@@ -42,8 +46,8 @@ export default function Testimoial(props: {
 
 
     return <>
-        <div className={twMerge("grid md:grid-cols-5 md:gap-8 lg:gap-16 md:items-center", className)} {...rest}>
-            <div className="aspect-square md:aspect-[9/16] md:col-span-2 relative overflow-hidden rounded-2xl isolate">
+        <div className={twMerge("group/testimonial grid md:grid-cols-5 md:gap-8 lg:gap-16 md:items-center", className)} {...rest}>
+            <div ref={photoRef} className="aspect-square md:aspect-[9/16] md:col-span-2 relative overflow-hidden rounded-2xl isolate">
                 <motion.div
                     className="absolute h-full bg-stone-900"
                     initial={{
@@ -55,7 +59,7 @@ export default function Testimoial(props: {
                 >
 
                 </motion.div>
-                <Image src={image} alt={name} className="size-full object-cover grayscale" style={{
+                <Image src={image} alt={name} className={twMerge("size-full object-cover grayscale transition-[filter] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none [@media(hover:hover)]:group-hover/testimonial:grayscale-0", photoInView && "[@media(hover:none)]:grayscale-0")} style={{
                     objectPosition: `50% ${imagePositionY * 100}%`
                 }} />
             </div>
