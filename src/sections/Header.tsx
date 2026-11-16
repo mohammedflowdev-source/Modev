@@ -15,8 +15,16 @@ const navItems = [
     href: "#intro",
   },
   {
+    label: "Services",
+    href: "#services",
+  },
+  {
     label: "Selected Works",
     href: "#projects",
+  },
+  {
+    label: "Process",
+    href: "#process",
   },
   {
     label: "Testimonials",
@@ -132,7 +140,7 @@ const Header: FC = () => {
     <div className="fixed top-0 left-0 w-full h-0 overflow-hidden bg-stone-900 z-10 " ref={navScope}>
       <nav className="mt-20 flex flex-col">
         {navItems.map(({ label, href }) => (
-          <a href={href} key={label} className="text-stone-200 border-t last:border-b border-stone-800 py-8 group/nav-item relative isolate" onClick={handleClickMobileNavItem}>
+          <a href={href} key={label} className="text-stone-200 border-t last:border-b border-stone-800 py-8 [@media(max-height:900px)]:py-6 group/nav-item relative isolate" onClick={handleClickMobileNavItem}>
             <div className="container !max-w-full flex items-center justify-between">
               <span className="text-3xl group-hover/nav-item:pl-4 transition-all duration-500">{label}</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">

@@ -50,7 +50,7 @@ const Testimonials: FC = () => {
 
   return <section className="section" id="testimonials">
     <div className="container">
-      <SectionLabel index="03" label="Testimonials" />
+      <SectionLabel index="05" label="Testimonials" />
     </div>
     <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none flex flex-col overflow-hidden" ref={titleRef}>
       <motion.span className="whitespace-nowrap" style={{

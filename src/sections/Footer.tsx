@@ -8,6 +8,7 @@ import { useSmoothScroll } from "@/components/SmoothScroll";
 import SectionLabel from "@/components/SectionLabel";
 import { socialLinks } from "@/data/socials";
 import LocalTime from "@/components/LocalTime";
+import WhatsAppIcon, { whatsappHref } from "@/components/WhatsAppIcon";
 
 
 const navItems = [
@@ -16,8 +17,16 @@ const navItems = [
     label: `Home`,
   },
   {
+    href: `#services`,
+    label: `Services`,
+  },
+  {
     href: `#projects`,
     label: `Projects`,
+  },
+  {
+    href: `#process`,
+    label: `Process`,
   },
   {
     href: `#testimonials`,
@@ -73,34 +82,41 @@ const Footer: FC = () => {
   return <footer ref={footerRef} className={`bg-stone-900 text-white ${fitsViewport ? "sticky bottom-0 z-0" : "relative"}`} id="contact">
     <div className="container">
       <div className="py-24 md:py-28 lg:py-24">
-        <SectionLabel index="05" label="Contact" className="text-white/60 dark:text-white/60" />
+        <SectionLabel index="07" label="Contact" className="text-white/60 dark:text-white/60" />
         <div className="flex items-center gap-3">
           <div className="size-3 rounded-full bg-green-400 animate-pulse"></div>
           <span className="uppercase">One spot available for next month</span></div>
         <div className="grid md:grid-cols-3 md:items-center">
           <div className="md:col-span-2">
             <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none mt-8 font-extralight" ref={scope}>Enough talk. Let&apos;s make something great together.</h2>
-            <a href="/contact">
-              <Button
-                as="span"
-                className="mt-8 text-sm px-4 md:text-base md:px-6"
-                variant="secondary"
-                iconAfter={
-                  <div className="size-6 overflow-hidden">
-                    <div className="w-12 h-6 flex transition-transform duration-300 group-hover/button:-translate-x-1/2">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
-                      </svg>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
-                      </svg>
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-5">
+              <a href="/contact">
+                <Button
+                  as="span"
+                  className="text-sm px-4 md:text-base md:px-6"
+                  variant="secondary"
+                  iconAfter={
+                    <div className="size-6 overflow-hidden">
+                      <div className="w-12 h-6 flex transition-transform duration-300 group-hover/button:-translate-x-1/2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                        </svg>
+                      </div>
                     </div>
-                  </div>
-                }
-              >
-                mohammedflow.dev@gmail.com
-              </Button>
-            </a>
+                  }
+                >
+                  mohammedflow.dev@gmail.com
+                </Button>
+              </a>
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp (opens in a new tab)">
+                <Button as="span" variant="text" className="text-sm md:text-base gap-0">
+                  <span className="inline-flex items-center gap-2"><WhatsAppIcon className="size-5" />Chat on WhatsApp</span>
+                </Button>
+              </a>
+            </div>
             <div className="flex flex-wrap gap-8 mt-8">
               {socialLinks.map(({ label, href }) => (
                 <a href={href} key={label} target="_blank" rel="noopener noreferrer" aria-label={`${label} (opens in a new tab)`}>

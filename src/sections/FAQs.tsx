@@ -63,7 +63,7 @@ const FAQs: FC = () => {
 
   return <section className="section" id="faqs">
     <div className="container">
-      <SectionLabel index="04" label="FAQs" />
+      <SectionLabel index="06" label="FAQs" />
       <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none" ref={headingScope}>FAQs</h2>
       <div className="mt-10 md:mt-16 lg:mt-20" ref={listRef}>
         {faqs.map(({ question, answer }, faqIndex) => {

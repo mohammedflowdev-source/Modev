@@ -5,6 +5,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import Link from "next/link";
 import ContactForm from "@/components/ContactForm";
 import { motion } from "motion/react";
+import WhatsAppIcon, { whatsappHref } from "@/components/WhatsAppIcon";
 
 export default function ContactPage() {
   return (
@@ -84,6 +85,21 @@ export default function ContactPage() {
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         >
           <ContactForm />
+        </motion.div>
+
+        {/* WhatsApp alternative */}
+        <motion.div
+          className="mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 text-base md:text-lg text-stone-600 dark:text-stone-400"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span>Prefer to chat?</span>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp (opens in a new tab)" className="text-stone-900 dark:text-stone-100">
+            <Button as="span" variant="text" className="gap-0">
+              <span className="inline-flex items-center gap-2"><WhatsAppIcon className="size-5" />Chat on WhatsApp</span>
+            </Button>
+          </a>
         </motion.div>
       </main>
 
