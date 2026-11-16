@@ -14,13 +14,14 @@ const archivo = Archivo({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://modevflow.vercel.app"),
-  title: "Mohammed Mostafa",
+  title: "Mohammed Mostafa — Mo Dev | Web Developer & Designer",
   description:
     "Mo Dev — web developer crafting fast, beautiful websites with clean code and thoughtful design that help businesses grow and stand out online.",
   openGraph: {
     title: "Mohammed Mostafa — Mo Dev",
     description:
       "Web developer crafting fast, beautiful websites with clean code and thoughtful design.",
+    siteName: "Mo Dev",
     type: "website",
   },
   twitter: {
