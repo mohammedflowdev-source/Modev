@@ -29,8 +29,15 @@ export default function Testimoial(props: {
     //const [quoteScope, quoteAnimate] = useAnimate()
     //const [citeScope, citeAnimate] = useAnimate()
 
+    // Start the entrance animation only once the testimonial scrolls into view.
+    const rootRef = useRef<HTMLDivElement>(null)
+    const inView = useInView(rootRef, { once: true, amount: 0.3 })
+    const enteredRef = useRef(false)
+
     useEffect(() => {
         if (isPresent) {
+            if (!inView || enteredRef.current) return;
+            enteredRef.current = true
             quoteEntranceAnimation().then(() => {
                 citeEnteranceAnimation();
             });
@@ -42,18 +49,18 @@ export default function Testimoial(props: {
                 safeToRemove();
             })
         }
-    }, [isPresent, quoteEntranceAnimation, citeEnteranceAnimation, quoteEntranceAnimation, quoteExitAnimation, safeToRemove])
+    }, [isPresent, inView, quoteEntranceAnimation, citeEnteranceAnimation, quoteExitAnimation, citeExitAnimation, safeToRemove])
 
 
     return <>
-        <div className={twMerge("group/testimonial grid md:grid-cols-5 md:gap-8 lg:gap-16 md:items-center", className)} {...rest}>
+        <div ref={rootRef} className={twMerge("group/testimonial grid md:grid-cols-5 md:gap-8 lg:gap-16 md:items-center", className)} {...rest}>
             <div ref={photoRef} className="aspect-square md:aspect-[9/16] md:col-span-2 relative overflow-hidden rounded-2xl isolate">
                 <motion.div
                     className="absolute h-full bg-stone-900"
                     initial={{
                         width: '100%'
                     }}
-                    animate={{ width: 0 }}
+                    animate={{ width: inView ? 0 : '100%' }}
                     exit={{ width: '100%' }}
                     transition={{ duration: 0.5 }}
                 >
