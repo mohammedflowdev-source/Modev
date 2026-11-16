@@ -1,11 +1,12 @@
 "use client"
 import {
-  FC, useState
+  FC, useEffect, useRef, useState
 } from "react";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
 import { twMerge } from "tailwind-merge";
 import SectionLabel from "@/components/SectionLabel";
+import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const faqs = [
@@ -31,47 +32,103 @@ const faqs = [
   },
 ];
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+const DURATION = 0.55;
+
 const FAQs: FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const reduceMotion = useReducedMotion()
+
+  // Staggered entrance: heading reveal, then each row's divider + question.
+  const { scope: headingScope, entranceAnimation } = useTextRevealAnimation()
+  const listRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(listRef, { once: true, margin: "0px 0px -15% 0px" })
+  const showRows = inView || !!reduceMotion
+
+  useEffect(() => {
+    if (inView) entranceAnimation()
+  }, [inView, entranceAnimation])
+
+  const rowDelay = (index: number) => (reduceMotion ? 0 : 0.3 + index * 0.06)
+  const answerVariants = {
+    collapsed: { height: 0, transition: { duration: reduceMotion ? 0 : DURATION, ease: EASE } },
+    open: { height: "auto", transition: { duration: reduceMotion ? 0 : DURATION, ease: EASE } },
+  }
+  const answerTextVariants = {
+    collapsed: { opacity: 0, y: reduceMotion ? 0 : 8, transition: { duration: reduceMotion ? 0 : 0.2, ease: EASE } },
+    open: { opacity: 1, y: 0, transition: { duration: reduceMotion ? 0 : 0.45, delay: reduceMotion ? 0 : 0.1, ease: EASE } },
+  }
+  // Shared timing for the CSS transitions so icon, fill and shift move with the height.
+  const cssMotion = "duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+
   return <section className="section" id="faqs">
     <div className="container">
       <SectionLabel index="04" label="FAQs" />
-      <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none">FAQs</h2>
-      <div className="mt-10 md:mt-16 lg:mt-20">
-        {faqs.map(({ question, answer }, faqIndex) => (
-          <div key={question} className="border-t border-stone-400 dark:border-stone-700 border-dotted py-6 md:py-8 lg:py-10 last:border-b relative isolate group/faq" onClick={() => {
-            if (faqIndex === selectedIndex) {
-              setSelectedIndex(null)
-            } else {
-              setSelectedIndex(faqIndex)
-            }
-          }}>
-            <div className={twMerge("absolute h-0 w-full bottom-0 left-0 bg-stone-300 dark:bg-stone-800 -z-10 group-hover/faq:h-full transition-all duration-700", faqIndex === selectedIndex && 'h-full')}></div>
-            <button type="button" aria-expanded={faqIndex === selectedIndex} aria-controls={`faq-answer-${faqIndex}`} className={twMerge("w-full text-left flex items-center justify-between gap-4 transition-all duration-700 group-hover/faq:lg:px-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-orange-500", faqIndex === selectedIndex && 'lg:px-8')}>
-              <span className="text-2xl md:text-3xl lg:text-4xl">{question}</span>
-              <span className={twMerge("inline-flex items-center justify-center size-11 border border-stone-400 dark:border-stone-600 rounded-full shrink-0 transition duration-300 bg-stone-200 dark:bg-stone-800", faqIndex === selectedIndex && 'rotate-45')}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-              </span>
-            </button>
-            <AnimatePresence>
-              {faqIndex === selectedIndex && (
-                <motion.div
-                  id={`faq-answer-${faqIndex}`}
-                  className="overflow-hidden lg:px-8"
-                  initial={{ height: 0 }}
-                  animate={{ height: 'auto' }}
-                  exit={{ height: 0 }}
-                  transition={{ duration: .7, ease: 'easeOut' }}
+      <h2 className="text-4xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-none" ref={headingScope}>FAQs</h2>
+      <div className="mt-10 md:mt-16 lg:mt-20" ref={listRef}>
+        {faqs.map(({ question, answer }, faqIndex) => {
+          const isOpen = faqIndex === selectedIndex
+          const buttonId = `faq-question-${faqIndex}`
+          const answerId = `faq-answer-${faqIndex}`
+          return (
+            <div key={question} className="py-6 md:py-8 lg:py-10 relative isolate group/faq" onClick={() => {
+              setSelectedIndex(isOpen ? null : faqIndex)
+            }}>
+              {/* Divider draws left → right on entrance */}
+              <motion.div
+                className="absolute top-0 left-0 h-px w-full bg-stone-900/15 dark:bg-stone-100/15 origin-left"
+                initial={{ scaleX: reduceMotion ? 1 : 0 }}
+                animate={showRows ? { scaleX: 1 } : undefined}
+                transition={{ duration: 0.8, delay: rowDelay(faqIndex), ease: EASE }}
+              />
+              {/* Hover / open fill — only on devices with real hover (no stuck grey on touch) */}
+              <div className={twMerge("absolute h-0 w-full bottom-0 left-0 bg-stone-300 dark:bg-stone-800 -z-10 transition-[height]", cssMotion, "[@media(hover:hover)]:group-hover/faq:h-full", isOpen && "[@media(hover:hover)]:h-full")}></div>
+              <motion.div
+                initial={{ opacity: reduceMotion ? 1 : 0, y: reduceMotion ? 0 : 16 }}
+                animate={showRows ? { opacity: 1, y: 0 } : undefined}
+                transition={{ duration: 0.6, delay: rowDelay(faqIndex) + (reduceMotion ? 0 : 0.1), ease: EASE }}
+              >
+                <button
+                  type="button"
+                  id={buttonId}
+                  aria-expanded={isOpen}
+                  aria-controls={isOpen ? answerId : undefined}
+                  className="w-full text-left flex items-center justify-between gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-orange-500"
                 >
-                  <p className="text-xl mt-4">{answer}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-          </div>
-        ))}
+                  <span className={twMerge("text-2xl md:text-3xl lg:text-4xl lg:pr-8 transition-transform", cssMotion, "lg:[@media(hover:hover)]:group-hover/faq:translate-x-8", isOpen && "lg:translate-x-8")}>{question}</span>
+                  <span className={twMerge("inline-flex items-center justify-center size-11 border border-stone-400 dark:border-stone-600 rounded-full shrink-0 bg-stone-200 dark:bg-stone-800 transition-[transform,background-color,border-color,color]", cssMotion, "lg:[@media(hover:hover)]:group-hover/faq:-translate-x-8", isOpen && "rotate-45 lg:-translate-x-8 bg-red-orange-500 dark:bg-red-orange-500 border-red-orange-500 dark:border-red-orange-500 text-white")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                  </span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      id={answerId}
+                      role="region"
+                      aria-labelledby={buttonId}
+                      className="overflow-hidden lg:px-8"
+                      variants={answerVariants}
+                      initial="collapsed"
+                      animate="open"
+                      exit="collapsed"
+                    >
+                      <motion.p variants={answerTextVariants} className="text-base md:text-lg text-stone-600 dark:text-stone-400 max-w-[60ch] leading-relaxed pt-4 pb-2 md:pb-4">{answer}</motion.p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </div>
+          )
+        })}
+        {/* Closing divider under the last row */}
+        <motion.div
+          className="h-px w-full bg-stone-900/15 dark:bg-stone-100/15 origin-left"
+          initial={{ scaleX: reduceMotion ? 1 : 0 }}
+          animate={showRows ? { scaleX: 1 } : undefined}
+          transition={{ duration: 0.8, delay: rowDelay(faqs.length), ease: EASE }}
+        />
       </div>
     </div>
   </section>;
