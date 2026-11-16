@@ -43,7 +43,7 @@ export default function Testimoial(props: {
 
     return <>
         <div className={twMerge("grid md:grid-cols-5 md:gap-8 lg:gap-16 md:items-center", className)} {...rest}>
-            <div className="aspect-square md:aspect-[9/16] md:col-span-2 relative">
+            <div className="aspect-square md:aspect-[9/16] md:col-span-2 relative overflow-hidden rounded-2xl isolate">
                 <motion.div
                     className="absolute h-full bg-stone-900"
                     initial={{
