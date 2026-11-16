@@ -1,6 +1,6 @@
 "use client";
-import { createRef, FC, ReactNode, RefObject, useEffect, useMemo, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { createRef, FC, ReactNode, RefObject, useEffect, useMemo, useState } from "react";
+import { motion, useMotionValue, useScroll, useTransform } from "motion/react";
 import { cubicBezier } from "motion";
 import Image from "next/image";
 import SectionLabel from "@/components/SectionLabel";
@@ -51,30 +51,43 @@ const useStackCards = () => {
 };
 
 /**
- * Wraps a project card. On phones it becomes a sticky layer; as the next card
- * slides over it, it scales to 0.95 and fades to 0.4. Elsewhere it is a plain wrapper.
+ * Wraps a project card. On phones it becomes a sticky layer; while the next card
+ * overlaps it, it scales to 0.95 and fades to 0.6. Elsewhere it is a plain wrapper.
  */
 const StackCard = ({ children, cardRef, nextRef, enabled }: { children: ReactNode; cardRef: RefObject<HTMLDivElement>; nextRef?: RefObject<HTMLDivElement>; enabled: boolean }) => {
-  // Progress 0 → 1 while the next card travels from the bottom of the screen to its sticky spot.
-  const { scrollYProgress } = useScroll({ target: nextRef ?? cardRef, offset: ["start end", "start start"] });
-  const coverEnd = useRef(0.85);
-  const [, forceRender] = useState(0);
-  useEffect(() => {
-    const measure = () => {
-      const top = cardRef.current ? parseFloat(getComputedStyle(cardRef.current).top) || 0 : 0;
-      coverEnd.current = Math.min(0.99, Math.max(0.5, 1 - top / window.innerHeight));
-      forceRender((n) => n + 1);
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [cardRef, enabled]);
-  // Run the effect over the last half of the next card's approach, finishing as it covers this one.
-  const coverRange = [Math.max(0, coverEnd.current - 0.5), coverEnd.current];
-  const scale = useTransform(scrollYProgress, coverRange, [1, 0.95], { ease: EASE });
-  const opacity = useTransform(scrollYProgress, coverRange, [1, 0.4], { ease: EASE });
-
   const stacking = enabled && !!nextRef;
+  // Overlap progress: 0 until the next card's top edge reaches this card's bottom edge (at its
+  // sticky position), 1 once the next card has slid all the way up to the same sticky top.
+  const overlap = useMotionValue(0);
+  const { scrollY } = useScroll();
+
+  useEffect(() => {
+    if (!stacking) {
+      overlap.set(0);
+      return;
+    }
+    const update = () => {
+      const card = cardRef.current;
+      const next = nextRef?.current;
+      if (!card || !next) return;
+      const stickyTop = parseFloat(getComputedStyle(card).top) || 0;
+      const height = card.offsetHeight; // layout height, unaffected by the scale transform
+      const coveredBottom = stickyTop + height;
+      const nextTop = next.getBoundingClientRect().top;
+      overlap.set(Math.min(1, Math.max(0, (coveredBottom - nextTop) / height)));
+    };
+    update();
+    const unsubscribe = scrollY.on("change", update);
+    window.addEventListener("resize", update);
+    return () => {
+      unsubscribe();
+      window.removeEventListener("resize", update);
+    };
+  }, [stacking, cardRef, nextRef, overlap, scrollY]);
+
+  const scale = useTransform(overlap, [0, 1], [1, 0.95], { ease: EASE });
+  const opacity = useTransform(overlap, [0, 1], [1, 0.6], { ease: EASE });
+
   return (
     <motion.div
       ref={cardRef}
