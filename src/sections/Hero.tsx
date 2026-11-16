@@ -9,7 +9,7 @@ import Button from "@/components/Button"
 import { motion, useScroll, useTransform } from "motion/react";
 
 import useTextRevealAnimation from "@/hooks/useTextRevealAnimation";
-import { usePreloaderDone } from "@/lib/preloader";
+import { usePageReady } from "@/lib/preloader";
 
 
 const Hero: FC = () => {
@@ -22,8 +22,8 @@ const Hero: FC = () => {
 
   const portraitWidth = useTransform(scrollYProgress, [0, 1], ['100%', '240%'])
   const { scope, entranceAnimation } = useTextRevealAnimation()
-  // Wait for the preloader curtain (if any) before the headline's line reveal and the buttons.
-  const ready = usePreloaderDone()
+  // Wait for the preloader or page-transition curtain (if any) before the headline's line reveal and the buttons.
+  const ready = usePageReady()
 
   useEffect(() => {
     if (ready) entranceAnimation()

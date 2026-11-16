@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
+import { usePageReady } from "@/lib/preloader";
 import Button from "@/components/Button";
 import ThemeToggle from "@/components/ThemeToggle";
 import SignatureLogo from "@/components/SignatureLogo";
@@ -16,6 +17,8 @@ const arrowLeft = (
 
 /** 404 page: same navbar as the other inner page (/contact), big "404" and a way back home. */
 export default function NotFound() {
+  // Entrance animations wait for the page-transition curtain (if any) to start lifting.
+  const ready = usePageReady();
   return (
     <div className="min-h-screen flex flex-col">
       <header className="fixed top-0 left-0 w-full backdrop-blur-md z-40" style={{ paddingTop: "env(safe-area-inset-top)" }}>
@@ -34,7 +37,7 @@ export default function NotFound() {
         <motion.h1
           className="text-[9rem] md:text-[14rem] lg:text-[18rem] leading-[0.85] tracking-[-0.06em] text-red-orange-500"
           initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.8, ease: EASE }}
         >
           404
@@ -42,7 +45,7 @@ export default function NotFound() {
         <motion.p
           className="mt-8 md:mt-10 text-2xl md:text-4xl tracking-[-0.02em] max-w-[24ch]"
           initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
         >
           This page wandered off. Let&apos;s get you back on track.
@@ -50,7 +53,7 @@ export default function NotFound() {
         <motion.div
           className="mt-10"
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
         >
           <Link href="/">

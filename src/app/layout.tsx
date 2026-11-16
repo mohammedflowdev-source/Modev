@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
+import PageTransition from "@/components/PageTransition";
 import { signatureFont } from "@/fonts";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -52,7 +53,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`antialiased bg-[var(--page-bg)] text-stone-900 dark:text-stone-100 transition-colors duration-500 ${archivo.variable} ${signatureFont.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SmoothScroll>{children}</SmoothScroll>
+          <SmoothScroll><PageTransition>{children}</PageTransition></SmoothScroll>
           <Cursor />
           <div className="grain" aria-hidden="true" />
         </ThemeProvider>

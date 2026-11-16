@@ -6,9 +6,12 @@ import Link from "next/link";
 import ContactForm from "@/components/ContactForm";
 import SignatureLogo from "@/components/SignatureLogo";
 import { motion } from "motion/react";
+import { usePageReady } from "@/lib/preloader";
 import WhatsAppIcon, { whatsappHref } from "@/components/WhatsAppIcon";
 
 export default function ContactPage() {
+  // Entrance animations wait for the page-transition curtain (if any) to start lifting.
+  const ready = usePageReady();
   return (
     <div className="min-h-screen bg-stone-200 dark:bg-stone-950 text-stone-900 dark:text-stone-100 flex flex-col justify-between selection:bg-red-orange-500 selection:text-white transition-colors duration-500">
       {/* Top Header / Navigation */}
@@ -55,7 +58,7 @@ export default function ContactPage() {
       <main className="container pt-36 pb-20 max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           {/* Status availability badge */}
@@ -80,7 +83,7 @@ export default function ContactPage() {
         <motion.div
           className="mt-14"
           initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         >
           <ContactForm />
@@ -90,7 +93,7 @@ export default function ContactPage() {
         <motion.div
           className="mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 text-base md:text-lg text-stone-600 dark:text-stone-400"
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.6, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <span>Prefer to chat?</span>

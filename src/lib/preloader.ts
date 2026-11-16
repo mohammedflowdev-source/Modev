@@ -22,17 +22,31 @@ export function markPreloaderDone() {
   window.dispatchEvent(new Event(PRELOADER_DONE_EVENT));
 }
 
-/** True once the page may play its entrance animations (immediately when there's no preloader). */
-export function usePreloaderDone() {
-  const [done, setDone] = useState(false);
+/**
+ * Page transitions mark <html data-transition="covering"> while the curtain hides the screen, and fire
+ * this event as it starts lifting, so the new page's entrance animations play as it's revealed.
+ */
+export const TRANSITION_REVEAL_EVENT = "site:transition-reveal";
+export const isTransitionCovering = () =>
+  typeof document !== "undefined" && document.documentElement.dataset.transition === "covering";
+
+/**
+ * True once the page may play its entrance animations: immediately, or after the preloader curtain /
+ * the page-transition curtain has lifted.
+ */
+export function usePageReady() {
+  const [ready, setReady] = useState(false);
   useEffect(() => {
-    if (!isPreloaderShowing()) {
-      setDone(true);
-      return;
-    }
-    const onDone = () => setDone(true);
-    window.addEventListener(PRELOADER_DONE_EVENT, onDone);
-    return () => window.removeEventListener(PRELOADER_DONE_EVENT, onDone);
+    const check = () => {
+      if (!isPreloaderShowing() && !isTransitionCovering()) setReady(true);
+    };
+    check();
+    window.addEventListener(PRELOADER_DONE_EVENT, check);
+    window.addEventListener(TRANSITION_REVEAL_EVENT, check);
+    return () => {
+      window.removeEventListener(PRELOADER_DONE_EVENT, check);
+      window.removeEventListener(TRANSITION_REVEAL_EVENT, check);
+    };
   }, []);
-  return done;
+  return ready;
 }
